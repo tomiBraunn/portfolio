@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+/* Logo typeface — same one skarlo.co uses for its wordmark.
+   Served from Framer's CDN; for production the client should license
+   Mikro Super or self-host a licensed copy. */
+@font-face {
+  font-family: "Mikro Super Bold Italic";
+  src: url("https://framerusercontent.com/assets/zmLkBGYG3ZWMUoGmdMOSatQMev4.woff2") format("woff2");
+  font-display: swap;
+  font-style: italic;
+  font-weight: 700;
+}
+
+@theme {
+  --color-wine: #560319;
+  --color-background: #000000;
+  --color-foreground: #ffffff;
+  --color-muted: #ababab;
+  --color-line: rgba(255, 255, 255, 0.1);
+  --color-accent: #e11438;
+  --font-sans: "Inter", "Inter Placeholder", sans-serif;
+  --font-serif: "Instrument Serif", serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: #ffffff;
+  }
+}
+
+/* Serif italic accent, the skarlo signature */
+.serif-accent {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+/* Wordmark / logo */
+.logo-font {
+  font-family: "Mikro Super Bold Italic", "Inter", sans-serif;
+  font-style: italic;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}

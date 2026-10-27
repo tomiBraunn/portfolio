@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Logo lab — tomasbraun</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  @font-face {
+    font-family: "Mikro Super Bold Italic";
+    src: url("https://framerusercontent.com/assets/zmLkBGYG3ZWMUoGmdMOSatQMev4.woff2") format("woff2");
+    font-style: italic;
+    font-weight: 700;
+  }
+  :root {
+    --ink: #0d0c0b; --paper: #efeee9; --fg: #f2f0eb; --muted: #8f8a82; --accent: #e0952e;
+    /* la tira del loader: K100 → K14 */
+    --g0: #000000; --g1: #222222; --g2: #484848; --g3: #6e6e6e; --g4: #929292; --g5: #b8b8b8; --g6: #dcdcdc;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body { background: var(--ink); color: var(--fg); font-family: "JetBrains Mono", monospace; font-size: 12px; padding: 40px 28px 100px; }
+  h1 { font-weight: 400; color: var(--muted); }
+  .opt { margin-top: 56px; border-top: 1px solid rgba(255,255,255,.12); padding-top: 18px; }
+  .opt > header { display: flex; gap: 14px; align-items: baseline; }
+  .opt > header b { color: var(--accent); font-weight: 500; }
+  .opt > header span { color: var(--muted); }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .cell { position: relative; min-height: 260px; display: grid; place-items: center; padding: 40px 28px; }
+  .cell.dark { background: var(--ink); outline: 1px solid rgba(255,255,255,.1); }
+  .cell.light { background: var(--paper); color: var(--ink); }
+  .tag { position: absolute; left: 10px; top: 8px; font-size: 10px; opacity: .55; }
+  .sizes { display: flex; gap: 28px; align-items: center; margin-top: 14px; color: var(--muted); font-size: 11px; }
+  .sizes .chip { display: flex; align-items: center; padding: 12px 16px; background: #1a1816; }
+  .logo { font-family: "Mikro Super Bold Italic", sans-serif; font-style: italic; font-weight: 700; letter-spacing: -0.03em; line-height: 1; white-space: nowrap; }
+
+  /* ── 1. El frame final del loader ─────────────────────────────
+     7 rectángulos altos y el nombre cruzándolos; cada franja del
+     nombre va en el gris opuesto a su rectángulo. */
+  .slab { position: relative; width: var(--w, 100%); aspect-ratio: 3.7; container-type: inline-size; }
+  .slab .bars, .slab .word { position: absolute; inset: 0; }
+  .slab .bars { display: flex; }
+  .slab .bars i { flex: 1; }
+  .slab .bars i:nth-child(1) { background: var(--g0); } .slab .bars i:nth-child(2) { background: var(--g1); }
+  .slab .bars i:nth-child(3) { background: var(--g2); } .slab .bars i:nth-child(4) { background: var(--g3); }
+  .slab .bars i:nth-child(5) { background: var(--g4); } .slab .bars i:nth-child(6) { background: var(--g5); }
+  .slab .bars i:nth-child(7) { background: var(--g6); }
+  .slab .word span {
+    position: absolute; inset: 0; display: grid; place-items: center;
+    font-size: 17.2cqw; padding-right: .04em;
+    clip-path: inset(0 calc((6 - var(--i)) * 100% / 7) 0 calc(var(--i) * 100% / 7));
+  }
+  .slab .word span:nth-child(1) { --i: 0; color: var(--g6); } .slab .word span:nth-child(2) { --i: 1; color: var(--g5); }
+  .slab .word span:nth-child(3) { --i: 2; color: var(--g4); } .slab .word span:nth-child(4) { --i: 3; color: #f2f0eb; } /* el gris opuesto al del medio es el mismo: va en blanco */
+  .slab .word span:nth-child(5) { --i: 4; color: var(--g2); } .slab .word span:nth-child(6) { --i: 5; color: var(--g1); }
+  .slab .word span:nth-child(7) { --i: 6; color: var(--g0); }
+  /* variante: el nombre calado (del color del fondo) */
+  .slab.cut .word span { color: var(--bg) !important; }
+  .dark .slab.cut { --bg: var(--ink); } .light .slab.cut { --bg: var(--paper); }
+  /* variante: rectángulos más altos que anchos (más "barras") */
+  .slab.tall { aspect-ratio: 2.4; }
+  .slab.tall .word span { font-size: 17.2cqw; }
+
+  /* ── 3. Isotipo de rectángulos altos + nombre ──────────────── */
+  .iso-lockup { display: inline-flex; align-items: center; gap: .28em; }
+  .iso { display: inline-flex; height: 1.18em; outline: 1px solid rgba(255,255,255,.18); }
+  .light .iso { outline-color: rgba(0,0,0,.15); }
+  .iso i { width: .15em; }
+  .iso i:nth-child(1) { background: var(--g0); } .iso i:nth-child(2) { background: var(--g1); }
+  .iso i:nth-child(3) { background: var(--g2); } .iso i:nth-child(4) { background: var(--g3); }
+  .iso i:nth-child(5) { background: var(--g4); } .iso i:nth-child(6) { background: var(--g5); }
+  .iso i:nth-child(7) { background: var(--g6); }
+
+  /* ── 4. Una letra por rectángulo ───────────────────────────── */
+  .tiles { display: inline-flex; }
+  .tiles span { display: inline-grid; place-items: center; height: 1.5em; padding: 0 .07em 0 .03em; }
+  .tiles span:nth-child(1) { background: #000; color: #e6e6e6; } .tiles span:nth-child(2) { background: #191919; color: #cfcfcf; }
+  .tiles span:nth-child(3) { background: #333; color: #b8b8b8; } .tiles span:nth-child(4) { background: #4c4c4c; color: #a1a1a1; }
+  .tiles span:nth-child(5) { background: #666; color: #e6e6e6; } .tiles span:nth-child(6) { background: #808080; color: #0d0d0d; }
+  .tiles span:nth-child(7) { background: #999; color: #262626; } .tiles span:nth-child(8) { background: #b3b3b3; color: #333; }
+  .tiles span:nth-child(9) { background: #ccc; color: #191919; } .tiles span:nth-child(10) { background: #e6e6e6; color: #000; }
+
+  /* ── favicon / avatar: los 7 rectángulos con "tb" ──────────── */
+  .avatar { aspect-ratio: 1; width: var(--w); }
+  .avatar .word span { font-size: 62cqw; }
+</style>
+</head>
+<body>
+  <h1>logo lab — tomasbraun · los rectángulos altos del loader · elegí una opción (o mezclá)</h1>
+
+  <!-- 1 -->
+  <section class="opt">
+    <header><b>1</b> el frame final del loader <span>7 rectángulos altos, el nombre los cruza y cada franja va en el gris opuesto</span></header>
+    <div class="row">
+      <div class="cell dark"><span class="tag">sobre tinta</span>
+        <div class="slab logo" style="--w: 92%"><div class="bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="word"><span>tomasbraun</span><span>tomasbraun</span><span>tomasbraun</span><span>tomasbraun</span><span>tomasbraun</span><span>tomasbraun</span><span>tomasbraun</span></div></div>
+      </div>
+      <div class="cell light"><span class="tag">sobre papel</span>
+        <div class="slab logo" style="--w: 92%"><div class="bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="word"><span>tomasbraun</span><span>tomasbraun</span><span>tomasbraun</span><span>tomasbraun</span><span>tomasbraun</span><span>tomasbraun</span><span>tomasbraun</span></div></div>
+      </div>
+    </div>
+    <div class="sizes">nav
+      <span class="chip"><span class="slab logo" style="--w: 150px"><span class="bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="word"><span>tomasbraun</span><span>tomasbraun</span><span>tomasbraun</span><span>tomasbraun</span><span>tomasbraun</span><span>tomasbraun</span><span>tomasbraun</span></span></span></span>
+      favicon
+      <span class="chip"><span class="slab avatar logo" style="--w: 40px"><span class="bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="word"><span>tb</span><span>tb</span><span>tb</span><span>tb</span><span>tb</span><span>tb</span><span>tb</span></span></span></span>
+    </div>
+  </section>
+
+  <!-- 2 -->
+  <section class="opt">
+    <header><b>2</b> rectángulos más altos <span>misma idea, más "barras" que franja: el bloque se acerca a un cuadrado</span></header>
+    <div class="row">
+      <div class="cell dark"><span class="tag">sobre tinta</span>
+        <div class="slab tall logo" style="--w: 80%"><div class="bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="word"><span>tomasbraun</span><span>tomasbraun</span><span>tomasbraun</span><span>tomasbraun</span><span>tomasbraun</span><span>tomasbraun</span><span>tomasbraun</span></div></div>
+      </div>
+      <div class="cell light"><span class="tag">calado: el nombre del color del fondo</span>
+        <div class="slab tall cut logo" style="--w: 80%"><div class="bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="word"><span>tomasbraun</span><span>tomasbraun</span><span>tomasbraun</span><span>tomasbraun</span><span>tomasbraun</span><span>tomasbraun</span><span>tomasbraun</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section class="opt">
+    <header><b>3</b> isotipo + nombre <span>los 7 rectángulos como un bloque al costado, más altos que las letras</span></header>
+    <div class="row">
+      <div class="cell dark"><span class="tag">sobre tinta</span>
+        <span class="logo iso-lockup" style="font-size: clamp(40px, 6vw, 96px)"><span class="iso"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>tomasbraun</span>
+      </div>
+      <div class="cell light"><span class="tag">sobre papel</span>
+        <span class="logo iso-lockup" style="font-size: clamp(40px, 6vw, 96px)"><span class="iso"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>tomasbraun</span>
+      </div>
+    </div>
+    <div class="sizes">nav
+      <span class="chip"><span class="logo iso-lockup" style="font-size: 22px"><span class="iso"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>tomasbraun</span></span>
+      favicon
+      <span class="chip"><span class="logo" style="font-size: 34px"><span class="iso"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></span></span>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section class="opt">
+    <header><b>4</b> una letra por rectángulo <span>10 pasos de gris, uno por letra, como fichas de un muestrario</span></header>
+    <div class="row">
+      <div class="cell dark"><span class="tag">sobre tinta</span>
+        <span class="logo tiles" style="font-size: clamp(36px, 5.2vw, 84px)"><span>t</span><span>o</span><span>m</span><span>a</span><span>s</span><span>b</span><span>r</span><span>a</span><span>u</span><span>n</span></span>
+      </div>
+      <div class="cell light"><span class="tag">sobre papel</span>
+        <span class="logo tiles" style="font-size: clamp(36px, 5.2vw, 84px)"><span>t</span><span>o</span><span>m</span><span>a</span><span>s</span><span>b</span><span>r</span><span>a</span><span>u</span><span>n</span></span>
+      </div>
+    </div>
+    <div class="sizes">nav
+      <span class="chip"><span class="logo tiles" style="font-size: 20px"><span>t</span><span>o</span><span>m</span><span>a</span><span>s</span><span>b</span><span>r</span><span>a</span><span>u</span><span>n</span></span></span>
+    </div>
+  </section>
+</body>
+</html>

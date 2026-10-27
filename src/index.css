@@ -1,0 +1,129 @@
+@import "tailwindcss";
+@import "lenis/dist/lenis.css";
+
+/* El portfolio viejo vive en /v1 y no debe aportar clases a este build. */
+@source not "../v1";
+
+/* Tipografía del logo: la del wordmark de skarlo. Se sirve desde el CDN de
+   Framer; para producción hay que licenciar Mikro Super o autoalojar una copia con licencia. */
+@font-face {
+  font-family: "Mikro Super Bold Italic";
+  src: url("https://framerusercontent.com/assets/zmLkBGYG3ZWMUoGmdMOSatQMev4.woff2") format("woff2");
+  font-display: swap;
+  font-style: italic;
+  font-weight: 700;
+}
+
+@theme {
+  /* Paleta tomada del mesh gradient del Figma (nodo 1:20) */
+  --color-ink: #0d0c0b;
+  --color-ink-2: #161412;
+  --color-paper: #efeee9;
+  --color-rust: #9a3f17;
+  --color-amber: #c47a1c;
+  --color-mustard: #b88a1e;
+  --color-ember: #b8401a;
+  --color-accent: #e0952e;
+  --color-foreground: #f2f0eb;
+  --color-muted: #8f8a82;
+  --color-line: rgba(255, 255, 255, 0.09);
+  --color-line-strong: rgba(255, 255, 255, 0.22);
+
+  --font-sans: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-logo: "Mikro Super Bold Italic", "Inter", sans-serif;
+}
+
+:root {
+  /* Margen lateral de la página. Todo se alinea a esto. */
+  --gutter: clamp(16px, 2.2vw, 36px);
+  --frame: var(--gutter);
+}
+
+@layer base {
+  html {
+    background: var(--color-ink);
+  }
+
+  body {
+    background-color: var(--color-ink);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-ink);
+  }
+}
+
+/* En @layer components para que las utilidades de Tailwind (text-[9px], etc.) puedan pisarlas */
+@layer components {
+  /* Display: Inter ExtraBold, lh 95 %, tracking −4,5 % (spec del Figma) */
+  .display {
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.045em;
+  }
+
+  /* Labels técnicos (sin mayúsculas forzadas) */
+  .mono {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.45;
+    letter-spacing: 0;
+  }
+
+  .logo-font {
+    font-family: var(--font-logo);
+    font-style: italic;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+  }
+
+  /* Contenedor alineado al margen de la página */
+  .frame-x {
+    padding-left: var(--frame);
+    padding-right: var(--frame);
+  }
+
+  /* Texto outline para el marquee */
+  .outline-text {
+    color: transparent;
+    -webkit-text-stroke: 1px var(--color-foreground);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Mientras corre el loader el logo del nav se oculta: el del loader vuela hasta acá */
+[data-loading] [data-nav-logo] {
+  opacity: 0;
+}
+/* el hero espera al loader: su contenido entra con la intro */
+[data-loading] [data-hero-reveal],
+[data-loading] [data-hero-word] {
+  opacity: 0;
+}
+
+/* Radio animable de la lupa binaria */
+@property --r {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+
+/* Scrollbar fina para la ventana de log */
+.log-scroll * {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line-strong) transparent;
+}
