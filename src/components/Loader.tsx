@@ -163,7 +163,7 @@ export function Loader({ onDone }: { onDone: () => void }) {
                   if (el) slices.current[i] = el
                 }}
                 className="whitespace-nowrap"
-                style={{ color: GRAYS[6 - i] }}
+                style={{ color: i === 3 ? '#f2f0eb' : GRAYS[6 - i] }}
               >
                 {LOGO}
               </span>
