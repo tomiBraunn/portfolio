@@ -36,73 +36,81 @@ export function Loader({ onDone }: { onDone: () => void }) {
     window.scrollTo(0, 0)
 
     const counterState = { v: 0 }
-    // arranca pausado: espera la fuente del logo para medirlo contra la tira
-    const tl = gsap.timeline({
-      paused: true,
-      onComplete: () => {
-        delete html.dataset.loading
-        lenis?.start()
-        setVisible(false)
-        onDone()
-      },
-    })
-
-    tl.from(meta.current!.children, { opacity: 0, y: 8, stagger: 0.05, duration: 0.4 }, 0)
-      .from(bars.current, {
-        scaleY: 0,
-        transformOrigin: "50% 100%",
-        stagger: 0.08,
-        duration: 0.7,
-        ease: "power3.out",
-      }, 0.1)
-      .to(counterState, {
-        v: 100,
-        duration: 1.7,
-        ease: "power2.inOut",
-        onUpdate: () => {
-          if (counter.current)
-            counter.current.textContent = String(Math.round(counterState.v)).padStart(3, "0")
+    // context: en StrictMode el efecto corre dos veces; revert() deshace los .from() del primer pase
+    let tl!: gsap.core.Timeline
+    let cancelled = false
+    const ctx = gsap.context(() => {
+      // arranca pausado: espera la fuente del logo para medirlo contra la tira
+      tl = gsap.timeline({
+        paused: true,
+        onComplete: () => {
+          delete html.dataset.loading
+          lenis?.start()
+          setVisible(false)
+          onDone()
         },
-      }, 0.1)
-      .from(slices.current, {
-        yPercent: 110,
-        stagger: 0.06,
-        duration: 0.8,
-        ease: "power4.out",
-      }, 0.7)
-      // persiana: los bloques se cierran alternando arriba/abajo
-      .to(bars.current, {
-        scaleY: 0,
-        transformOrigin: (i: number) => (i % 2 ? "50% 0%" : "50% 100%"),
-        stagger: 0.05,
-        duration: 0.6,
-        ease: "power3.inOut",
-      }, 2.1)
-      .to(root.current, { backgroundColor: "rgba(13,12,11,0)", duration: 0.7, ease: "power2.inOut" }, 2.1)
-      .to([...meta.current!.children, labels.current], { opacity: 0, duration: 0.3 }, 2.1)
-      // logo B: cada franja toma su paso de la tira sobre tinta
-      .to(slices.current, { color: (i: number) => INK_STEPS[i], duration: 0.5, stagger: 0.04 }, 2.3)
-      // al volar al nav vuelve a blanco, como el wordmark del logo A
-      .to(slices.current, { color: "#f2f0eb", duration: 0.6, ease: "power2.inOut" }, 3.2)
-      .add(() => {
-        // FLIP del logo hasta la posición exacta del logo del nav
-        const target = document.querySelector<HTMLElement>("[data-nav-logo]")
-        if (!target) return
-        const group = logo.current!.getBoundingClientRect()
-        const from = slices.current[0].getBoundingClientRect()
-        const to = target.getBoundingClientRect()
-        gsap.to(logo.current, {
-          x: to.left - from.left,
-          y: to.top - from.top,
-          scale: to.width / from.width,
-          transformOrigin: `${from.left - group.left}px ${from.top - group.top}px`,
-          duration: 0.9,
-          ease: "expo.inOut",
-        })
-      }, 3.0)
-      .to({}, { duration: 0.95 }, 3.0) // espera a que aterrice el FLIP
+      })
 
-    loadLogoFont().then(() => {
+      tl.from(meta.current!.children, { opacity: 0, y: 8, stagger: 0.05, duration: 0.4 }, 0)
+        .from(bars.current, {
+          scaleY: 0,
+          transformOrigin: "50% 100%",
+          stagger: 0.08,
+          duration: 0.7,
+          ease: "power3.out",
+        }, 0.1)
+        .to(counterState, {
+          v: 100,
+          duration: 1.7,
+          ease: "power2.inOut",
+          onUpdate: () => {
+            if (counter.current)
+              counter.current.textContent = String(Math.round(counterState.v)).padStart(3, "0")
+          },
+        }, 0.1)
+        .from(slices.current, {
+          yPercent: 110,
+          stagger: 0.06,
+          duration: 0.8,
+          ease: "power4.out",
+        }, 0.7)
+        // persiana: los bloques se cierran alternando arriba/abajo
+        .to(bars.current, {
+          scaleY: 0,
+          transformOrigin: (i: number) => (i % 2 ? "50% 0%" : "50% 100%"),
+          stagger: 0.05,
+          duration: 0.6,
+          ease: "power3.inOut",
+        }, 2.1)
+        .to(root.current, { backgroundColor: "rgba(13,12,11,0)", duration: 0.7, ease: "power2.inOut" }, 2.1)
+        .to([...meta.current!.children, labels.current], { opacity: 0, duration: 0.3 }, 2.1)
+        // logo B: cada franja toma su paso de la tira sobre tinta
+        .to(slices.current, { color: (i: number) => INK_STEPS[i], duration: 0.5, stagger: 0.04 }, 2.3)
+        // al volar al nav vuelve a blanco, como el wordmark del logo A
+        .to(slices.current, { color: "#f2f0eb", duration: 0.6, ease: "power2.inOut" }, 3.2)
+        .add(() => {
+          // FLIP del logo hasta la posición exacta del logo del nav
+          const target = document.querySelector<HTMLElement>("[data-nav-logo]")
+          if (!target) return
+          const group = logo.current!.getBoundingClientRect()
+          const from = slices.current[0].getBoundingClientRect()
+          const to = target.getBoundingClientRect()
+          gsap.to(logo.current, {
+            x: to.left - from.left,
+            y: to.top - from.top,
+            scale: to.width / from.width,
+            transformOrigin: `${from.left - group.left}px ${from.top - group.top}px`,
+            duration: 0.65,
+            ease: "expo.inOut",
+          })
+        }, 3.0)
+        .to({}, { duration: 0.95 }, 3.0) // espera a que aterrice el FLIP
+    }, root)
+    tl.timeScale(1.45) // ~2,8 s en total; el FLIP de arriba ya está ajustado a esta escala
+
+    // si la fuente falla o tarda, arranca igual
+    Promise.race([loadLogoFont(), new Promise((r) => setTimeout(r, 600))]).catch(() => {}).then(() => {
+      if (cancelled) return
       const strip = bars.current[0]?.parentElement
       if (!logo.current || !strip || !slices.current[0]) return
       logo.current.style.fontSize = "100px"
@@ -113,7 +121,9 @@ export function Loader({ onDone }: { onDone: () => void }) {
     })
 
     return () => {
+      cancelled = true
       tl.kill()
+      ctx.revert()
       delete html.dataset.loading
       lenis?.start()
     }
@@ -151,7 +161,7 @@ export function Loader({ onDone }: { onDone: () => void }) {
         </div>
 
         {/* logo: 7 copias del tamaño de la tira, cada una recortada a su columna */}
-        <div ref={logo} className="logo-font pointer-events-none absolute inset-x-0 top-0 h-[min(26vw,280px)] leading-none">
+        <div ref={logo} className="logo-font pointer-events-none will-change-transform absolute inset-x-0 top-0 h-[min(26vw,280px)] leading-none">
           {GRAYS.map((_, i) => (
             <div
               key={i}
