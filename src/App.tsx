@@ -12,6 +12,9 @@ import { About } from "@/components/About"
 import { Contact } from "@/components/Contact"
 import { Footer } from "@/components/Footer"
 import { setLogoFavicon } from "@/components/Wordmark"
+import { ProjectPage } from "@/components/ProjectPage"
+import { projects } from "@/data/content"
+import { scrollAfterRoute, takePendingSection, useProjectSlug } from "@/lib/route"
 
 export default function App() {
   const [ready, setReady] = useState(false)
@@ -20,21 +23,31 @@ export default function App() {
     setLogoFavicon()
   }, [])
 
+  const slug = useProjectSlug()
+  const project = projects.find((p) => p.slug === slug)
+  useEffect(() => {
+    scrollAfterRoute(project ? undefined : takePendingSection())
+  }, [project])
+
   return (
     <>
       <Loader onDone={onLoaded} />
       <Frame />
       <Nav />
-      <main>
-        <Hero ready={ready} />
-        <Marquee />
-        <Work />
-        <Archive />
-        <Lab />
-        <Stack />
-        <About />
-        <Contact />
-      </main>
+      {project ? (
+        <ProjectPage project={project} />
+      ) : (
+        <main>
+          <Hero ready={ready} />
+          <Marquee />
+          <Work />
+          <Archive />
+          <Lab />
+          <Stack />
+          <About />
+          <Contact />
+        </main>
+      )}
       <Footer />
     </>
   )

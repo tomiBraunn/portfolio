@@ -21,6 +21,7 @@ export const hero = {
 }
 
 export type Project = {
+  slug: string
   index: string
   name: string
   tagline: string
@@ -29,6 +30,8 @@ export type Project = {
   year: string
   stack: string[]
   href: string
+  // Demo embebible (URL de un deploy o video) para la página del proyecto; vacío hasta tenerla.
+  demo?: string
   // Captura en public/work/; si falta, se usa un recorte del gradient de marca.
   image?: string
   tone: string
@@ -37,6 +40,7 @@ export type Project = {
 export const projects: Project[] = [
   {
     index: "01",
+    slug: "kinetix",
     name: "Kinetix",
     tagline: "Physical rehab, turned into games",
     description:
@@ -50,6 +54,7 @@ export const projects: Project[] = [
   },
   {
     index: "02",
+    slug: "slidesplus",
     name: "SlidesPlus",
     tagline: "AI presentation builder, slide by slide in HTML",
     description:
@@ -63,6 +68,7 @@ export const projects: Project[] = [
   },
   {
     index: "03",
+    slug: "synqfy",
     name: "synqfy",
     tagline: "Your lights, synced to what's playing",
     description:
@@ -76,6 +82,7 @@ export const projects: Project[] = [
   },
   {
     index: "04",
+    slug: "tinta",
     name: "Tinta",
     tagline: "Live polls, drawn in ink",
     description:
@@ -89,6 +96,7 @@ export const projects: Project[] = [
   },
   {
     index: "05",
+    slug: "backlight",
     name: "Backlight",
     tagline: "A guard against hidden prompt injection",
     description:

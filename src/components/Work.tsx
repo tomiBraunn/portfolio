@@ -1,4 +1,5 @@
 import { useLayoutEffect, useRef } from "react"
+import { projectHref } from "@/lib/route"
 import { gsap, reducedMotion } from "@/lib/smooth-scroll"
 import { projects } from "@/data/content"
 import { Plate } from "./Plate"
@@ -91,7 +92,7 @@ export function Work() {
               data-guide={p.name}
               className="grid shrink-0 gap-8 md:h-[64vh] md:w-[min(74vw,1180px)] md:grid-cols-[1.35fr_1fr] md:gap-10"
             >
-              <div data-plate className="h-[52vw] md:h-full">
+              <a href={projectHref(p.slug)} data-plate className="block h-[52vw] md:h-full">
                 <Plate tone={p.tone} src={p.image} className="h-full">
                   <span className="display absolute -bottom-[0.12em] left-4 text-[clamp(90px,14vw,240px)] text-white/90 mix-blend-overlay">
                     {p.index}
@@ -100,11 +101,15 @@ export function Work() {
                     {p.tagline}
                   </span>
                 </Plate>
-              </div>
+              </a>
 
               <div className="flex flex-col justify-between gap-8">
                 <div>
-                  <h3 className="display text-[clamp(40px,4.6vw,76px)]">{p.name}</h3>
+                  <h3 className="display text-[clamp(40px,4.6vw,76px)]">
+                    <a href={projectHref(p.slug)} className="transition-colors hover:text-accent">
+                      {p.name}
+                    </a>
+                  </h3>
                   <p className="mt-5 max-w-[42ch] leading-relaxed text-foreground/75">{p.description}</p>
                 </div>
                 <dl className="mono text-[11px]">
@@ -120,7 +125,7 @@ export function Work() {
                     </div>
                   ))}
                   <a
-                    href={p.href}
+                    href={projectHref(p.slug)}
                     className="flex justify-between border-y border-line py-2.5 transition-colors hover:text-accent"
                   >
                     <span>View project</span>
