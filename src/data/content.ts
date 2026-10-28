@@ -29,7 +29,8 @@ export type Project = {
   year: string
   stack: string[]
   href: string
-  // Placeholder visual: un recorte del gradient de marca hasta tener screenshots.
+  // Captura en public/work/; si falta, se usa un recorte del gradient de marca.
+  image?: string
   tone: string
 }
 
@@ -44,6 +45,7 @@ export const projects: Project[] = [
     year: "2026",
     stack: ["React", "MediaPipe", "Phaser", "Express", "Supabase", "Expo"],
     href: "https://github.com/tomiBraunn/Kinetix",
+    image: "/work/kinetix.webp",
     tone: "45% 10%",
   },
   {
@@ -56,6 +58,7 @@ export const projects: Project[] = [
     year: "2026",
     stack: ["React", "GSAP", "Monaco", "Express", "PostgreSQL", "Supabase"],
     href: "https://github.com/tomiBraunn/Slidesplus",
+    image: "/work/slidesplus.webp",
     tone: "15% 70%",
   },
   {
@@ -68,6 +71,7 @@ export const projects: Project[] = [
     year: "2026",
     stack: ["Node.js", "Spotify API", "Home Assistant", "Docker"],
     href: "https://github.com/tomiBraunn/synqfy",
+    image: "/work/synqfy.webp",
     tone: "70% 35%",
   },
   {
@@ -80,6 +84,7 @@ export const projects: Project[] = [
     year: "2026",
     stack: ["Next.js", "TypeScript", "Supabase"],
     href: "https://github.com/tomiBraunn/Tinta",
+    image: "/work/tinta.webp",
     tone: "95% 90%",
   },
   {
@@ -92,6 +97,7 @@ export const projects: Project[] = [
     year: "2026",
     stack: ["Claude Skills", "Prompt engineering"],
     href: "https://github.com/tomiBraunn/backlight-skill",
+    image: "/work/backlight.webp",
     tone: "30% 60%",
   },
 ]

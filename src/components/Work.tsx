@@ -92,7 +92,7 @@ export function Work() {
               className="grid shrink-0 gap-8 md:h-[64vh] md:w-[min(74vw,1180px)] md:grid-cols-[1.35fr_1fr] md:gap-10"
             >
               <div data-plate className="h-[52vw] md:h-full">
-                <Plate tone={p.tone} className="h-full">
+                <Plate tone={p.tone} src={p.image} className="h-full">
                   <span className="display absolute -bottom-[0.12em] left-4 text-[clamp(90px,14vw,240px)] text-white/90 mix-blend-overlay">
                     {p.index}
                   </span>
