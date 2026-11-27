@@ -2,7 +2,6 @@
 @import "lenis/dist/lenis.css";
 
 /* Solo esta página y los componentes compartidos de /src aportan clases. */
-@source not "../v1";
 
 @theme {
   /* Paleta del MoodBoard: papel, espuma de café, chocolate y el naranja del botón del video */
