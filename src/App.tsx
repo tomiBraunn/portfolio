@@ -3,10 +3,9 @@ import { Loader } from "@/components/Loader"
 import { Frame } from "@/components/Frame"
 import { Nav } from "@/components/Nav"
 import { Hero } from "@/components/Hero"
-import { Marquee } from "@/components/Marquee"
 import { Work } from "@/components/Work"
 import { Archive } from "@/components/Archive"
-import { Lab } from "@/components/Lab"
+import { Vibe } from "@/components/Vibe"
 import { Stack } from "@/components/Stack"
 import { About } from "@/components/About"
 import { Contact } from "@/components/Contact"
@@ -39,10 +38,9 @@ export default function App() {
       ) : (
         <main>
           <Hero ready={ready} />
-          <Marquee />
           <Work />
           <Archive />
-          <Lab />
+          <Vibe />
           <Stack />
           <About />
           <Contact />

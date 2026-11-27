@@ -1,14 +1,18 @@
 import { useLayoutEffect, useRef } from "react"
-import { projects, type Project } from "@/data/content"
+import { localized, projects, type Project } from "@/data/content"
+import { useLang, useT } from "@/lib/i18n"
 import { goHome, projectHref } from "@/lib/route"
 import { gsap, reducedMotion } from "@/lib/smooth-scroll"
 import { Plate } from "./Plate"
 
 /** Página de detalle de un proyecto: portada, ficha y el espacio para la demo. */
-export function ProjectPage({ project }: { project: Project }) {
+export function ProjectPage({ project: base }: { project: Project }) {
+  const t = useT()
+  const lang = useLang()
+  const project = localized(base, lang)
   const root = useRef<HTMLElement>(null)
-  const i = projects.indexOf(project)
-  const next = projects[(i + 1) % projects.length]
+  const i = projects.indexOf(base)
+  const next = localized(projects[(i + 1) % projects.length], lang)
 
   useLayoutEffect(() => {
     if (reducedMotion) return
@@ -29,11 +33,8 @@ export function ProjectPage({ project }: { project: Project }) {
           }}
           className="transition-colors hover:text-accent"
         >
-          ← Work
+          {t("backToWork")}
         </a>
-        <span>
-          {project.index} / {String(projects.length).padStart(2, "0")}
-        </span>
       </div>
 
       <header className="mt-10 grid gap-8 md:mt-16 md:grid-cols-[1.35fr_1fr] md:gap-10">
@@ -47,9 +48,9 @@ export function ProjectPage({ project }: { project: Project }) {
         </div>
         <dl data-in className="mono self-end text-[11px]">
           {[
-            ["Year", project.year],
-            ["Role", project.role],
-            ["Stack", project.stack.join(", ")],
+            [t("year"), project.year],
+            [t("role"), project.role],
+            [t("stack"), project.stack.join(", ")],
           ].map(([k, v]) => (
             <div key={k} className="flex justify-between gap-6 border-t border-line py-2.5">
               <dt className="text-muted">{k}</dt>
@@ -62,7 +63,7 @@ export function ProjectPage({ project }: { project: Project }) {
             rel="noreferrer"
             className="flex justify-between border-y border-line py-2.5 transition-colors hover:text-accent"
           >
-            <span>Source on GitHub</span>
+            <span>{t("sourceOnGithub")}</span>
             <span>↗</span>
           </a>
         </dl>
@@ -73,14 +74,14 @@ export function ProjectPage({ project }: { project: Project }) {
       </div>
 
       <section className="mt-16 grid gap-8 md:mt-24 md:grid-cols-[1fr_2fr] md:gap-10">
-        <p className="mono text-muted">[01] Overview</p>
+        <p className="mono text-muted">{t("overview")}</p>
         <p className="max-w-[60ch] text-[clamp(18px,1.6vw,22px)] leading-relaxed text-foreground/85">
           {project.description}
         </p>
       </section>
 
       <section className="mt-16 grid gap-8 md:mt-24 md:grid-cols-[1fr_2fr] md:gap-10">
-        <p className="mono text-muted">[02] Demo</p>
+        <p className="mono text-muted">{t("demo")}</p>
         <div className="aspect-[16/10]">
           {project.demo ? (
             <iframe
@@ -92,7 +93,7 @@ export function ProjectPage({ project }: { project: Project }) {
           ) : (
             <Plate tone={project.tone} className="h-full">
               <span className="mono absolute inset-0 grid place-items-center text-foreground/80">
-                demo coming soon
+                {t("demoSoon")}
               </span>
             </Plate>
           )}
@@ -103,7 +104,7 @@ export function ProjectPage({ project }: { project: Project }) {
         href={projectHref(next.slug)}
         className="group mt-24 flex items-end justify-between gap-6 border-t border-line pt-6 md:mt-36"
       >
-        <span className="mono text-muted">Next project</span>
+        <span className="mono text-muted">{t("nextProject")}</span>
         <span className="display text-[clamp(40px,7vw,120px)] transition-colors group-hover:text-accent">
           {next.name} →
         </span>

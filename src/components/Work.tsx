@@ -1,7 +1,8 @@
 import { useLayoutEffect, useRef } from "react"
 import { projectHref } from "@/lib/route"
 import { gsap, reducedMotion } from "@/lib/smooth-scroll"
-import { projects } from "@/data/content"
+import { localized, projects } from "@/data/content"
+import { useLang, useT } from "@/lib/i18n"
 import { Plate } from "./Plate"
 
 /**
@@ -9,9 +10,10 @@ import { Plate } from "./Plate"
  * scroll vertical mueve la pista en X. En mobile / reduced-motion es una lista.
  */
 export function Work() {
+  const t = useT()
+  const lang = useLang()
   const root = useRef<HTMLElement>(null)
   const fill = useRef<HTMLDivElement>(null)
-  const count = useRef<HTMLSpanElement>(null)
 
   useLayoutEffect(() => {
     if (reducedMotion || !root.current) return
@@ -32,10 +34,6 @@ export function Work() {
           invalidateOnRefresh: true,
           onUpdate: (self) => {
             if (fill.current) fill.current.style.transform = `scaleX(${self.progress})`
-            if (count.current)
-              count.current.textContent = String(
-                Math.min(projects.length, Math.floor(self.progress * projects.length) + 1),
-              ).padStart(2, "0")
           },
         },
       })
@@ -71,22 +69,23 @@ export function Work() {
         >
           {/* panel de apertura */}
           <header className="flex shrink-0 flex-col justify-between gap-10 md:h-[64vh] md:w-[min(34vw,520px)]">
-            <p className="mono text-muted">[01] Selected work</p>
+            <p className="mono text-muted">{t("selectedWork")}</p>
             <div>
               <h2 data-guide="title" className="display text-[clamp(64px,10vw,168px)]">
-                Work
+                {t("work")}
               </h2>
               <p className="mt-6 max-w-[34ch] text-[17px] leading-snug text-foreground/80">
-                Products built properly — from first schema to final pixel. Each one shipped,
-                measured and iterated with real users.
+                {t("workLead")}
               </p>
             </div>
             <p className="mono text-muted">
-              {String(projects.length).padStart(2, "0")} projects <span className="hidden md:inline">— scroll →</span>
+              {projects.length} {t("projects")} <span className="hidden md:inline">{t("scrollHint")}</span>
             </p>
           </header>
 
-          {projects.map((p) => (
+          {projects.map((base) => {
+            const p = localized(base, lang)
+            return (
             <article
               key={p.name}
               data-guide={p.name}
@@ -94,9 +93,6 @@ export function Work() {
             >
               <a href={projectHref(p.slug)} data-plate className="block h-[52vw] md:h-full">
                 <Plate tone={p.tone} src={p.image} className="h-full">
-                  <span className="display absolute -bottom-[0.12em] left-4 text-[clamp(90px,14vw,240px)] text-white/90 mix-blend-overlay">
-                    {p.index}
-                  </span>
                   <span className="mono absolute left-4 top-4 bg-ink/70 px-2 py-1 text-foreground backdrop-blur-sm">
                     {p.tagline}
                   </span>
@@ -107,17 +103,20 @@ export function Work() {
                 <div>
                   <h3 className="display text-[clamp(40px,4.6vw,76px)]">
                     <a href={projectHref(p.slug)} className="transition-colors hover:text-accent">
-                      {p.name}
+                      {p.logo ? (
+                        <img src={p.logo} alt={p.name} className="h-[1em] w-auto transition-opacity hover:opacity-80" />
+                      ) : (
+                        p.name
+                      )}
                     </a>
                   </h3>
                   <p className="mt-5 max-w-[42ch] leading-relaxed text-foreground/75">{p.description}</p>
                 </div>
                 <dl className="mono text-[11px]">
                   {[
-                    ["Index", p.index],
-                    ["Year", p.year],
-                    ["Role", p.role],
-                    ["Stack", p.stack.join(", ")],
+                    [t("year"), p.year],
+                    [t("role"), p.role],
+                    [t("stack"), p.stack.join(", ")],
                   ].map(([k, v]) => (
                     <div key={k} className="flex justify-between gap-6 border-t border-line py-2.5">
                       <dt className="text-muted">{k}</dt>
@@ -128,21 +127,19 @@ export function Work() {
                     href={projectHref(p.slug)}
                     className="flex justify-between border-y border-line py-2.5 transition-colors hover:text-accent"
                   >
-                    <span>View project</span>
+                    <span>{t("viewProject")}</span>
                     <span>→</span>
                   </a>
                 </dl>
               </div>
             </article>
-          ))}
+            )
+          })}
           <div aria-hidden className="hidden w-[8vw] shrink-0 md:block" />
         </div>
 
         {/* progreso: una regla que se llena */}
         <div className="pointer-events-none absolute inset-x-[var(--frame)] bottom-8 hidden items-center gap-4 md:flex">
-          <span className="mono text-muted">
-            <span ref={count}>01</span> / {String(projects.length).padStart(2, "0")}
-          </span>
           <div className="relative h-3 flex-1">
             <div
               className="absolute inset-0 opacity-50"

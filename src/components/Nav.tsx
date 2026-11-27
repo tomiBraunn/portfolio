@@ -1,13 +1,17 @@
+import { setLang, useLang, useT } from "@/lib/i18n"
+import { cn } from "@/lib/utils"
 import { Wordmark } from "./Wordmark"
 
 const LINKS = [
-  { href: "#work", label: "Work", n: "01" },
-  { href: "#stack", label: "Stack", n: "02" },
-  { href: "#about", label: "About", n: "03" },
-  { href: "#contact", label: "Contact", n: "04" },
-]
+  { href: "#work", key: "work" },
+  { href: "#stack", key: "stack" },
+  { href: "#about", key: "about" },
+  { href: "#contact", key: "contact" },
+] as const
 
 export function Nav() {
+  const t = useT()
+  const lang = useLang()
   return (
     <header className="frame-x fixed inset-x-0 top-0 z-50 mix-blend-difference">
       <nav className="flex items-center justify-between py-4 text-white">
@@ -21,12 +25,23 @@ export function Nav() {
               href={l.href}
               className="mono group flex items-baseline gap-1.5 text-white/80 transition-colors hover:text-white"
             >
-              <span className="hidden text-[9px] text-white/40 md:inline">[{l.n}]</span>
-              <span className={l.label === "Stack" || l.label === "About" ? "hidden sm:inline" : ""}>
-                {l.label}
+              <span className={l.key === "stack" || l.key === "about" ? "hidden sm:inline" : ""}>
+                {t(l.key)}
               </span>
             </a>
           ))}
+          <div className="mono flex gap-1.5" role="group" aria-label="Language">
+            {(["es", "en"] as const).map((l) => (
+              <button
+                key={l}
+                onClick={() => setLang(l)}
+                aria-pressed={lang === l}
+                className={cn("transition-colors hover:text-white", lang === l ? "text-white" : "text-white/40")}
+              >
+                {l}
+              </button>
+            ))}
+          </div>
         </div>
       </nav>
     </header>

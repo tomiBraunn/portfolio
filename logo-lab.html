@@ -36,7 +36,7 @@
   /* ── 1. El frame final del loader ─────────────────────────────
      7 rectángulos altos y el nombre cruzándolos; cada franja del
      nombre va en el gris opuesto a su rectángulo. */
-  .slab { position: relative; width: var(--w, 100%); aspect-ratio: 3.7; container-type: inline-size; }
+  .slab { display: block; position: relative; width: var(--w, 100%); aspect-ratio: 3.7; container-type: inline-size; }
   .slab .bars, .slab .word { position: absolute; inset: 0; }
   .slab .bars { display: flex; }
   .slab .bars i { flex: 1; }
@@ -82,10 +82,46 @@
   /* ── favicon / avatar: los 7 rectángulos con "tb" ──────────── */
   .avatar { aspect-ratio: 1; width: var(--w); }
   .avatar .word span { font-size: 62cqw; }
+
+  /* ── en contexto: nav, hero, footer y favicon de cada variante ── */
+  .ctx-title { margin-top: 28px; }
+  .ctx-title b { color: var(--accent); font-weight: 500; margin-right: 10px; }
+  .ctx { display: grid; grid-template-columns: 1.45fr 1fr; gap: 16px; margin-top: 12px; align-items: start; }
+  .shot { position: relative; overflow: hidden; outline: 1px solid rgba(255,255,255,.1); container-type: inline-size; }
+  .shot.hero { aspect-ratio: 16 / 10; display: grid; place-items: center;
+    background: linear-gradient(rgba(13,12,11,.5), rgba(13,12,11,.1) 50%, var(--ink)), url(/gradient-wide.webp) center / cover; }
+  .shot .nav { position: absolute; inset: 0 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; font-size: 11px; }
+  .shot .links { display: flex; gap: 18px; opacity: .8; }
+  .shot.foot { display: flex; flex-direction: column; gap: 14px; padding: 16px; }
+  .shot.foot hr { width: 100%; border: 0; border-top: 1px solid rgba(255,255,255,.22); }
+  .fav { display: flex; gap: 14px; align-items: center; color: var(--muted); font-size: 10px; }
 </style>
 </head>
 <body>
   <h1>logo lab — tomasbraun · los rectángulos altos del loader · elegí una opción (o mezclá)</h1>
+
+  <!-- en contexto: cada variante en los lugares donde vive el logo -->
+  <section class="opt" id="ctx">
+    <header><b>en contexto</b> <span>nav a tamaño real, hero, footer de borde a borde y favicon (32 y 16 px)</span></header>
+  </section>
+  <script>
+    const x7 = (s) => s.repeat(7)
+    const slab = (cls, w, text = "tomasbraun") =>
+      `<span class="slab logo ${cls}" style="--w:${w}"><span class="bars">${x7("<i></i>")}</span><span class="word">${x7(`<span>${text}</span>`)}</span></span>`
+    const iso = (size) =>
+      `<span class="logo iso-lockup" style="font-size:${size}"><span class="iso">${x7("<i></i>")}</span>tomasbraun</span>`
+    const variants = [
+      { n: "1", title: "el frame final del loader", nav: slab("", "150px"), hero: slab("", "80%"), foot: slab("", "100%"), fav: (px) => slab("avatar", px, "tb") },
+      { n: "2 / 2b", title: "rectángulos más altos (en el footer, calado)", nav: slab("tall", "108px"), hero: slab("tall", "58%"), foot: slab("tall cut", "100%"), fav: (px) => slab("avatar", px, "tb") },
+      { n: "3", title: "isotipo + nombre", nav: iso("22px"), hero: iso("11.5cqw"), foot: iso("15.4cqw"), fav: (px) => slab("avatar", px, "") },
+    ]
+    document.getElementById("ctx").insertAdjacentHTML("beforeend", variants.map((v) => `
+      <p class="ctx-title"><b>${v.n}</b>${v.title}</p>
+      <div class="ctx">
+        <div class="shot hero"><div class="nav">${v.nav}<span class="links"><span>[01] Work</span><span>[02] Stack</span><span>[03] About</span><span>[04] Contact</span></span></div>${v.hero}</div>
+        <div class="shot foot dark">${v.foot}<hr><div class="fav">favicon ${v.fav("32px")} ${v.fav("16px")}</div></div>
+      </div>`).join(""))
+  </script>
 
   <!-- 1 -->
   <section class="opt">

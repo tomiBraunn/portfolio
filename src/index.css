@@ -3,6 +3,7 @@
 
 /* El portfolio viejo vive en /v1 y no debe aportar clases a este build. */
 @source not "../v1";
+@source not "../cocina";
 
 /* Tipografía del logo: la del wordmark de skarlo. Se sirve desde el CDN de
    Framer; para producción hay que licenciar Mikro Super o autoalojar una copia con licencia. */
@@ -105,7 +106,10 @@
   }
 }
 
-/* Mientras corre el loader el logo del nav se oculta: el del loader vuela hasta acá */
+/* Mientras corre el loader el logo del nav se oculta; el del loader vuela al hero y el del nav aparece después */
+[data-nav-logo] {
+  transition: opacity 0.6s;
+}
 [data-loading] [data-nav-logo] {
   opacity: 0;
 }

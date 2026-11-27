@@ -1,3 +1,5 @@
+import type { Lang } from "@/lib/i18n"
+
 // Única fuente de contenido del sitio. Todo lo marcado como placeholder
 // se reemplaza por contenido real sin tocar los componentes.
 
@@ -16,8 +18,10 @@ export const site = {
 }
 
 export const hero = {
-  intro:
-    "Tomas Braun, Buenos Aires. Full-stack developer — database, API, frontend and every pixel in between.",
+  intro: {
+    en: "Tomas Braun, Buenos Aires. Full-stack developer, from database and API to frontend and every pixel in between.",
+    es: "Tomas Braun, Buenos Aires. Desarrollador full-stack, de la base de datos y la API al frontend y cada píxel del medio.",
+  },
 }
 
 export type Project = {
@@ -34,8 +38,14 @@ export type Project = {
   demo?: string
   // Captura en public/work/; si falta, se usa un recorte del gradient de marca.
   image?: string
+  // Logo del proyecto (public/work/logos/); en Work reemplaza al nombre.
+  logo?: string
   tone: string
+  // Traducción al español de los textos del proyecto.
+  es?: { tagline: string; description: string; role: string }
 }
+
+export const localized = (p: Project, l: Lang): Project => (l === "es" && p.es ? { ...p, ...p.es } : p)
 
 export const projects: Project[] = [
   {
@@ -46,11 +56,18 @@ export const projects: Project[] = [
     description:
       "Rehab exercises for older adults, reimagined as games. While the patient plays, computer vision tracks balance, posture and movement in real time, and the physiotherapist follows metrics, history and progress from a dashboard.",
     role: "Full-stack, computer vision, mobile",
-    year: "2026",
+    year: "2025",
     stack: ["React", "MediaPipe", "Phaser", "Express", "Supabase", "Expo"],
     href: "https://github.com/tomiBraunn/Kinetix",
     image: "/work/kinetix.webp",
+    logo: "/work/logos/kinetix.webp",
     tone: "45% 10%",
+    es: {
+      tagline: "Rehabilitación física convertida en juegos",
+      description:
+        "Ejercicios de rehabilitación para adultos mayores, pensados como juegos. Mientras el paciente juega, la visión por computadora mide equilibrio, postura y movimiento en tiempo real, y el kinesiólogo sigue métricas, historial y progreso desde un panel.",
+      role: "Full-stack, visión por computadora, mobile",
+    },
   },
   {
     index: "02",
@@ -60,11 +77,18 @@ export const projects: Project[] = [
     description:
       "Builds full presentations from an idea, a prompt or a document. Every slide is a 1920×1080 HTML section, so layouts, type and animation go beyond a classic slide engine. Edit visually, in code with Monaco, or by chatting.",
     role: "Product, frontend & backend",
-    year: "2026",
+    year: "2025",
     stack: ["React", "GSAP", "Monaco", "Express", "PostgreSQL", "Supabase"],
     href: "https://github.com/tomiBraunn/Slidesplus",
     image: "/work/slidesplus.webp",
+    logo: "/work/logos/slidesplus.svg",
     tone: "15% 70%",
+    es: {
+      tagline: "Generador de presentaciones con IA, diapositiva por diapositiva en HTML",
+      description:
+        "Arma presentaciones completas a partir de una idea, un prompt o un documento. Cada diapositiva es una sección HTML de 1920×1080, así que el diseño, la tipografía y la animación van más allá de un motor de slides clásico. Se edita visualmente, en código con Monaco o charlando.",
+      role: "Producto, frontend y backend",
+    },
   },
   {
     index: "03",
@@ -74,11 +98,17 @@ export const projects: Project[] = [
     description:
       "Extracts the palette from the current Spotify album cover and projects it onto Home Assistant lights. Runs server-side, with synced lyrics, queue, night mode and a kiosk view for tablets.",
     role: "Full-stack, home automation",
-    year: "2026",
+    year: "2025",
     stack: ["Node.js", "Spotify API", "Home Assistant", "Docker"],
     href: "https://github.com/tomiBraunn/synqfy",
     image: "/work/synqfy.webp",
     tone: "70% 35%",
+    es: {
+      tagline: "Tus luces, sincronizadas con lo que suena",
+      description:
+        "Extrae la paleta de la tapa del álbum que suena en Spotify y la proyecta en las luces de Home Assistant. Corre del lado del servidor, con letras sincronizadas, cola, modo noche y una vista kiosco para tablets.",
+      role: "Full-stack, domótica",
+    },
   },
   {
     index: "04",
@@ -88,11 +118,17 @@ export const projects: Project[] = [
     description:
       "Create a poll, share the link, watch results appear in real time. No account needed to vote, optional passwords and a handcrafted paper-and-ink design. Started as a school project, grew into a small product.",
     role: "Design, full-stack",
-    year: "2026",
+    year: "2025",
     stack: ["Next.js", "TypeScript", "Supabase"],
     href: "https://github.com/tomiBraunn/Tinta",
     image: "/work/tinta.webp",
     tone: "95% 90%",
+    es: {
+      tagline: "Encuestas en vivo, dibujadas con tinta",
+      description:
+        "Creás una encuesta, compartís el link y mirás los resultados aparecer en tiempo real. No hace falta cuenta para votar, hay contraseñas opcionales y un diseño artesanal de papel y tinta. Empezó como proyecto de la escuela y terminó siendo un producto chico.",
+      role: "Diseño, full-stack",
+    },
   },
   {
     index: "05",
@@ -102,11 +138,17 @@ export const projects: Project[] = [
     description:
       "A Claude skill that inspects documents for hidden instructions (white text, zero-size fonts, invisible Unicode) before acting on them, and reports what it finds instead of silently obeying.",
     role: "Author",
-    year: "2026",
+    year: "2025",
     stack: ["Claude Skills", "Prompt engineering"],
     href: "https://github.com/tomiBraunn/backlight-skill",
     image: "/work/backlight.webp",
     tone: "30% 60%",
+    es: {
+      tagline: "Una defensa contra la inyección de prompts oculta",
+      description:
+        "Una skill de Claude que revisa documentos en busca de instrucciones ocultas (texto blanco, fuentes de tamaño cero, Unicode invisible) antes de actuar, y reporta lo que encuentra en vez de obedecer en silencio.",
+      role: "Autor",
+    },
   },
 ]
 
@@ -128,11 +170,12 @@ export const archive = [
   { title: "CLI scaffolder", year: "2023", kind: "Tooling", tone: "60% 75%", span: "md:col-span-4 md:col-start-8", ratio: "aspect-[4/5]", offset: "md:mt-32" },
 ]
 
-// Lab: pared de capturas. Placeholder: fotos grises de picsum hasta tener screenshots.
-export const lab = [1015, 1025, 1039, 1043, 1044, 1050, 1062, 1069, 1074, 1080, 1084, 106, 110, 133, 164].map(
+// Mi vibe: fotos que me gustan. Placeholder: fotos de picsum hasta tener las propias
+// (para usar las tuyas: ponelas en public/vibe/ y listá acá "/vibe/nombre.jpg").
+export const vibe = [1015, 1025, 1039, 1043, 1044, 1050, 1062, 1069, 1074, 1080, 1084, 106, 110, 133, 164].map(
   (id, i) => ({
-    image: `https://picsum.photos/id/${id}/600/400?grayscale`,
-    title: `Experiment ${String(i + 1).padStart(2, "0")}`,
+    image: `https://picsum.photos/id/${id}/600/400`,
+    title: `Photo ${String(i + 1).padStart(2, "0")}`,
   }),
 )
 
@@ -145,10 +188,14 @@ export const stack = [
 ]
 
 export const about = {
-  lead:
-    "I'm Tomas, a developer who cares about the parts nobody sees: the schema, the edge cases, the 1px that's off.",
-  body:
-    "I learned to build with TypeScript, serverless and AI tooling from day one. I own the whole stack so decisions stay fast and nothing falls between the cracks.",
+  lead: {
+    en: "I'm Tomas, a developer who cares about the parts nobody sees: the schema, the edge cases, the 1px that's off.",
+    es: "Soy Tomas, un desarrollador que se ocupa de lo que nadie ve: el esquema, los casos borde, el 1px que no cae.",
+  },
+  body: {
+    en: "I learned to build with TypeScript, serverless and AI tooling from day one. I own the whole stack so decisions stay fast and nothing falls between the cracks.",
+    es: "Aprendí a construir con TypeScript, serverless y herramientas de IA desde el primer día. Me hago cargo de todo el stack, así las decisiones son rápidas y nada se pierde en un traspaso.",
+  },
 }
 
 export const principles = [
@@ -160,7 +207,7 @@ export const principles = [
 ]
 
 export const timeline = [
-  { year: "2026", text: "Independent — building products for startups and agencies." },
+  { year: "2025", text: "Independent — building products for startups and agencies." },
   { year: "2025", text: "Shipped Turnia and Ledgerly to production." },
   { year: "2024", text: "Quipu: inventory over WhatsApp for small shops." },
   { year: "2023", text: "First freelance clients. Realtime sync and tooling." },

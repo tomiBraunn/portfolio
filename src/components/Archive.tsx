@@ -1,15 +1,17 @@
 import { archive } from "@/data/content"
+import { useT } from "@/lib/i18n"
 import { Plate } from "./Plate"
 import { PixelReveal } from "./PixelReveal"
 
 /** Grilla asimétrica de trabajos chicos con caption mono (video scroll-57). */
 export function Archive() {
+  const t = useT()
   return (
     <section aria-labelledby="archive-title" className="frame-x relative py-32">
       <div className="grid grid-cols-12 gap-[var(--gutter)]">
-        <p className="mono col-span-12 text-muted md:col-span-3">[01.b] Archive</p>
+        <p className="mono col-span-12 text-muted md:col-span-3">{t("archive")}</p>
         <h2 id="archive-title" data-guide="title" className="display col-span-12 text-[clamp(40px,5.4vw,92px)] md:col-span-8">
-          Smaller things, <br /> same care.
+          {t("archiveTitle")}
         </h2>
       </div>
 

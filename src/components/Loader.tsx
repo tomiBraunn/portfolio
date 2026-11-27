@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef, useState } from "react"
 import { gsap, lenis, reducedMotion } from "@/lib/smooth-scroll"
-import { INK_STEPS } from "@/lib/brand"
+import { INK_STEPS, OPPOSITE, SPAN } from "@/lib/brand"
 import { CropMarks } from "./CropMarks"
 import { LOGO, loadLogoFont } from "./Wordmark"
 
@@ -86,20 +86,21 @@ export function Loader({ onDone }: { onDone: () => void }) {
         .to([...meta.current!.children, labels.current], { opacity: 0, duration: 0.3 }, 2.1)
         // logo B: cada franja toma su paso de la tira sobre tinta
         .to(slices.current, { color: (i: number) => INK_STEPS[i], duration: 0.5, stagger: 0.04 }, 2.3)
-        // al volar al nav vuelve a blanco, como el wordmark del logo A
-        .to(slices.current, { color: "#f2f0eb", duration: 0.6, ease: "power2.inOut" }, 3.2)
+        // al volar al hero cada franja toma el tono con el que queda en la placa
+        .to(slices.current, { color: (i: number) => OPPOSITE[i], duration: 0.6, ease: "power2.inOut" }, 3.2)
         .add(() => {
-          // FLIP del logo hasta la posición exacta del logo del nav
-          const target = document.querySelector<HTMLElement>("[data-nav-logo]")
+          // FLIP: la tira entera se superpone a la placa del hero y el texto cae sobre su lugar
+          const target = document.querySelector<SVGRectElement>("[data-hero-logo]")
           if (!target) return
           const group = logo.current!.getBoundingClientRect()
           const from = slices.current[0].getBoundingClientRect()
           const to = target.getBoundingClientRect()
+          const k = to.width / group.width
           gsap.to(logo.current, {
-            x: to.left - from.left,
-            y: to.top - from.top,
-            scale: to.width / from.width,
-            transformOrigin: `${from.left - group.left}px ${from.top - group.top}px`,
+            x: to.left - group.left,
+            y: to.top - group.top - k * (from.top - group.top),
+            scale: k,
+            transformOrigin: "0 0",
             duration: 0.65,
             ease: "expo.inOut",
           })
@@ -116,7 +117,7 @@ export function Loader({ onDone }: { onDone: () => void }) {
       logo.current.style.fontSize = "100px"
       // 0.96: casi el ancho de la tira, así cada franja coincide con un paso de gris
       const ratio = strip.offsetWidth / slices.current[0].offsetWidth
-      logo.current.style.fontSize = `${100 * ratio * 0.96}px`
+      logo.current.style.fontSize = `${100 * ratio * SPAN}px`
       tl.play()
     })
 

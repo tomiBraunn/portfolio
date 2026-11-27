@@ -1,24 +1,26 @@
 import { site } from "@/data/content"
+import { useT } from "@/lib/i18n"
 import { Wordmark } from "./Wordmark"
-
-const COLUMNS = [
-  {
-    title: "Index",
-    links: [
-      { label: "Work", href: "#work" },
-      { label: "Stack", href: "#stack" },
-      { label: "About", href: "#about" },
-      { label: "Contact", href: "#contact" },
-    ],
-  },
-  {
-    title: "Elsewhere",
-    links: [{ label: site.email, href: `mailto:${site.email}` }, ...site.socials],
-  },
-]
 
 /** Footer estilo skarlo / ESR: logo de borde a borde, una línea y columnas. */
 export function Footer() {
+  const t = useT()
+  const columns = [
+    {
+      title: t("index"),
+      links: [
+        { label: t("work"), href: "#work" },
+        { label: t("stack"), href: "#stack" },
+        { label: t("about"), href: "#about" },
+        { label: t("contact"), href: "#contact" },
+      ],
+    },
+    {
+      title: t("elsewhere"),
+      links: [{ label: site.email, href: `mailto:${site.email}` }, ...site.socials],
+    },
+  ]
+
   return (
     <footer className="frame-x relative overflow-hidden pb-14 pt-24">
       <div data-guide="wordmark">
@@ -28,7 +30,7 @@ export function Footer() {
       <hr className="mt-10 border-line-strong" />
 
       <div className="mt-10 grid grid-cols-2 gap-[var(--gutter)] gap-y-10 md:grid-cols-12">
-        {COLUMNS.map((col) => (
+        {columns.map((col) => (
           <div key={col.title} className="md:col-span-3">
             <p className="mono text-muted">{col.title}</p>
             <ul className="mt-4 flex flex-col gap-1.5">
@@ -47,7 +49,7 @@ export function Footer() {
           </div>
         ))}
         <div className="md:col-span-3">
-          <p className="mono text-muted">Based in</p>
+          <p className="mono text-muted">{t("basedIn")}</p>
           <p className="mt-4 leading-relaxed">
             {site.location}
             <br />
@@ -55,18 +57,16 @@ export function Footer() {
           </p>
         </div>
         <div className="md:col-span-3">
-          <p className="mono text-muted">Colophon</p>
-          <p className="mt-4 leading-relaxed text-foreground/75">
-            Set in Inter, JetBrains Mono & Mikro Super. Built with React, GSAP, Lenis & Three.js.
-          </p>
+          <p className="mono text-muted">{t("colophon")}</p>
+          <p className="mt-4 leading-relaxed text-foreground/75">{t("colophonText")}</p>
         </div>
       </div>
 
       <div className="mono mt-20 flex flex-wrap justify-between gap-4 text-muted">
         <span>© {new Date().getFullYear()} {site.name}</span>
-        <span>Measured twice, shipped once.</span>
+        <span>{t("tagline")}</span>
         <a href="#top" className="transition-colors hover:text-foreground">
-          Back to top ↑
+          {t("backToTop")}
         </a>
       </div>
     </footer>
